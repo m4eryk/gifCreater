@@ -1,4 +1,13 @@
-let LZWEncoder = function () {
+/**
+ * This class handles LZW encoding
+ * Adapted from Jef Poskanzer's Java port by way of J. M. G. Elliott.
+ * @author Kevin Weiner (original Java version - kweiner@fmsware.com)
+ * @author Thibault Imbert (AS3 version - bytearray.org)
+ * @author Kevin Kwok (JavaScript version - https://github.com/antimatter15/jsgif)
+ * @version 0.1 AS3 implementation
+ */
+
+LZWEncoder = function () {
 
     let exports = {};
     let EOF = -1;
@@ -9,8 +18,22 @@ let LZWEncoder = function () {
     let remaining;
     let curPixel;
 
+    // GIFCOMPR.C - GIF Image compression routines
+    // Lempel-Ziv compression based on 'compress'. GIF modifications by
+    // David Rowley (mgardi@watdcsu.waterloo.edu)
+    // General DEFINEs
+
     let BITS = 12;
-    let HSIZE = 5003;
+    let HSIZE = 5003; // 80% occupancy
+
+    // GIF Image compression - modified 'compress'
+    // Based on: compress.c - File compression ala IEEE Computer, June 1984.
+    // By Authors: Spencer W. Thomas (decvax!harpo!utah-cs!utah-gr!thomas)
+    // Jim McKie (decvax!mcvax!jim)
+    // Steve Davies (decvax!vax135!petsd!peora!srd)
+    // Ken Turkowski (decvax!decwrl!turtlevax!ken)
+    // James A. Woods (decvax!ihnp4!ames!jaw)
+    // Joe Orost (decvax!vax135!petsd!joe)
 
     let n_bits; // number of bits/code
     let maxbits = BITS; // user settable max # bits/code
@@ -21,18 +44,49 @@ let LZWEncoder = function () {
     let hsize = HSIZE; // for dynamic table sizing
     let free_ent = 0; // first unused entry
 
+    // block compression parameters -- after all codes are used up,
+    // and compression rate changes, start over.
+
     let clear_flg = false;
 
+    // Algorithm: use open addressing double hashing (no chaining) on the
+    // prefix code / next character combination. We do a let iant of Knuth's
+    // algorithm D (vol. 3, sec. 6.4) along with G. Knott's relatively-prime
+    // secondary probe. Here, the modular division first probe is gives way
+    // to a faster exclusive-or manipulation. Also do block compression with
+    // an adaptive reset, whereby the code table is cleared when the compression
+    // ratio decreases, but after the table fills. The let iable-length output
+    // codes are re-sized at this point, and a special CLEAR code is generated
+    // for the decompressor. Late addition: letruct the table according to
+    // file size for noticeable speed improvement on small files. Please direct
+    // questions about this implementation to ames!jaw.
 
     let g_init_bits;
     let ClearCode;
     let EOFCode;
+
+    // output
+    // Output the given code.
+    // Inputs:
+    // code: A n_bits-bit integer. If == -1, then EOF. This assumes
+    // that n_bits =< wordsize - 1.
+    // Outputs:
+    // Outputs code to the file.
+    // Assumptions:
+    // Chars are 8 bits long.
+    // Algorithm:
+    // Maintain a BITS character long buffer (so that 8 codes will
+    // fit in it exactly). Use the VAX insv instruction to insert each
+    // code in turn. When the buffer fills up empty it and start over.
+
     let cur_accum = 0;
     let cur_bits = 0;
     let masks = [0x0000, 0x0001, 0x0003, 0x0007, 0x000F, 0x001F, 0x003F, 0x007F, 0x00FF, 0x01FF, 0x03FF, 0x07FF, 0x0FFF, 0x1FFF, 0x3FFF, 0x7FFF, 0xFFFF];
 
+    // Number of characters so far in this 'packet'
     let a_count;
 
+    // Define the storage for the packet accumulator
     let accum = [];
 
     let LZWEncoder = exports.LZWEncoder = function LZWEncoder(width, height, pixels, color_depth) {
@@ -42,6 +96,8 @@ let LZWEncoder = function () {
         initCodeSize = Math.max(2, color_depth);
     };
 
+    // Add a character to the end of the current packet, and if it is 254
+    // characters, flush the packet to disk.
     let char_out = function char_out(c, outs) {
         accum[a_count++] = c;
         if (a_count >= 254) flush_char(outs);
@@ -58,11 +114,11 @@ let LZWEncoder = function () {
     };
 
     // reset code table
-    var cl_hash = function cl_hash(hsize) {
+    let cl_hash = function cl_hash(hsize) {
         for (let i = 0; i < hsize; ++i) htab[i] = -1;
     };
 
-    let compress = function compress(init_bits, outs) {
+    let compress = exports.compress = function compress(init_bits, outs) {
 
         let fcode;
         let i; /* = 0 */
@@ -72,8 +128,10 @@ let LZWEncoder = function () {
         let hsize_reg;
         let hshift;
 
+        // Set up the globals: g_init_bits - initial number of bits
         g_init_bits = init_bits;
 
+        // Set up the necessary values
         clear_flg = false;
         n_bits = g_init_bits;
         maxcode = MAXCODE(n_bits);
@@ -96,11 +154,11 @@ let LZWEncoder = function () {
 
         output(ClearCode, outs);
 
-        outer_loop: while ((c = nextPixel()) !== EOF) {
+        outer_loop: while ((c = nextPixel()) != EOF) {
             fcode = (c << maxbits) + ent;
             i = (c << hshift) ^ ent; // xor hashing
 
-            if (htab[i] === fcode) {
+            if (htab[i] == fcode) {
                 ent = codetab[i];
                 continue;
             } else if (htab[i] >= 0) { // non-empty slot
@@ -112,7 +170,7 @@ let LZWEncoder = function () {
                     if ((i -= disp) < 0)
                         i += hsize_reg;
 
-                    if (htab[i] === fcode) {
+                    if (htab[i] == fcode) {
                         ent = codetab[i];
                         continue outer_loop;
                     }
@@ -127,21 +185,22 @@ let LZWEncoder = function () {
             } else cl_block(outs);
         }
 
+        // Put out the final code.
         output(ent, outs);
         output(EOFCode, outs);
     };
 
     // ----------------------------------------------------------------------------
-    let encode = function encode(os) {
+    let encode = exports.encode = function encode(os) {
         os.writeByte(initCodeSize); // write "initial code size" byte
-        remaining = imgW * imgH; // reset navigation variables
+        remaining = imgW * imgH; // reset navigation let iables
         curPixel = 0;
         compress(initCodeSize + 1, os); // compress and write the pixel data
         os.writeByte(0); // write block terminator
     };
 
     // Flush the packet to disk, and reset the accumulator
-    var flush_char = function flush_char(outs) {
+    let flush_char = function flush_char(outs) {
         if (a_count > 0) {
             outs.writeByte(a_count);
             outs.writeBytes(accum, 0, a_count);
@@ -150,9 +209,9 @@ let LZWEncoder = function () {
     };
 
     /**
-     * @return {number}
-     */
-    var MAXCODE = function MAXCODE(n_bits) {
+	 * @return {number}
+	 */
+	let MAXCODE = function MAXCODE(n_bits) {
         return (1 << n_bits) - 1;
     };
 
@@ -160,14 +219,14 @@ let LZWEncoder = function () {
     // Return the next pixel from the image
     // ----------------------------------------------------------------------------
 
-    var nextPixel = function nextPixel() {
+    let nextPixel = function nextPixel() {
         if (remaining === 0) return EOF;
         --remaining;
         let pix = pixAry[curPixel++];
         return pix & 0xff;
     };
 
-    var output = function output(code, outs) {
+    let output = function output(code, outs) {
 
         cur_accum &= masks[cur_bits];
 
@@ -195,12 +254,12 @@ let LZWEncoder = function () {
             } else {
 
                 ++n_bits;
-                if (n_bits === maxbits) maxcode = maxmaxcode;
+                if (n_bits == maxbits) maxcode = maxmaxcode;
                 else maxcode = MAXCODE(n_bits);
             }
         }
 
-        if (code === EOFCode) {
+        if (code == EOFCode) {
 
             // At EOF, write the rest of the buffer.
             while (cur_bits > 0) {
@@ -214,7 +273,5 @@ let LZWEncoder = function () {
     };
 
     LZWEncoder.apply(this, arguments);
+    return exports;
 };
-
-
-export default new LZWEncoder();

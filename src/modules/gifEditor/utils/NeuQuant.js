@@ -1,15 +1,18 @@
-const NeuQuant = function () {
 
-    const netsize = 256; /* number of colours used */
+
+NeuQuant = function () {
+
+    let exports = {};
+    let netsize = 256; /* number of colours used */
 
     /* four primes near 500 - assume no image has a length so large */
     /* that it is divisible by all four primes */
 
-    const prime1 = 499;
-    const prime2 = 491;
-    const prime3 = 487;
-    const prime4 = 503;
-    const minpicturebytes = (3 * prime4); /* minimum size for input image */
+    let prime1 = 499;
+    let prime2 = 491;
+    let prime3 = 487;
+    let prime4 = 503;
+    let minpicturebytes = (3 * prime4); /* minimum size for input image */
 
     /*
      * Program Skeleton ---------------- [select samplefac in range 1..30] [read
@@ -23,36 +26,36 @@ const NeuQuant = function () {
      * Network Definitions -------------------
      */
 
-    const maxnetpos = (netsize - 1);
-    const netbiasshift = 4; /* bias for colour values */
-    const ncycles = 100; /* no. of learning cycles */
+    let maxnetpos = (netsize - 1);
+    let netbiasshift = 4; /* bias for colour values */
+    let ncycles = 100; /* no. of learning cycles */
 
     /* defs for freq and bias */
-    const intbiasshift = 16; /* bias for fractions */
-    const intbias = (1 << intbiasshift);
-    const gammashift = 10; /* gamma = 1024 */
-    const gamma = (1 << gammashift);
-    const betashift = 10;
-    const beta = (intbias >> betashift); /* beta = 1/1024 */
-    const betagamma = (intbias << (gammashift - betashift));
+    let intbiasshift = 16; /* bias for fractions */
+    let intbias = (1 << intbiasshift);
+    let gammashift = 10; /* gamma = 1024 */
+    let gamma = (1 << gammashift);
+    let betashift = 10;
+    let beta = (intbias >> betashift); /* beta = 1/1024 */
+    let betagamma = (intbias << (gammashift - betashift));
 
     /* defs for decreasing radius factor */
-    const initrad = (netsize >> 3); /* for 256 cols, radius starts */
-    const radiusbiasshift = 6; /* at 32.0 biased by 6 bits */
-    const radiusbias = (1 << radiusbiasshift);
-    const initradius = (initrad * radiusbias); /* and decreases by a */
-    const radiusdec = 30; /* factor of 1/30 each cycle */
+    let initrad = (netsize >> 3); /* for 256 cols, radius starts */
+    let radiusbiasshift = 6; /* at 32.0 biased by 6 bits */
+    let radiusbias = (1 << radiusbiasshift);
+    let initradius = (initrad * radiusbias); /* and decreases by a */
+    let radiusdec = 30; /* factor of 1/30 each cycle */
 
     /* defs for decreasing alpha factor */
-    const alphabiasshift = 10; /* alpha starts at 1.0 */
-    const initalpha = (1 << alphabiasshift);
+    let alphabiasshift = 10; /* alpha starts at 1.0 */
+    let initalpha = (1 << alphabiasshift);
     let alphadec; /* biased by 10 bits */
 
     /* radbias and alpharadbias used for radpower calculation */
-    const radbiasshift = 8;
-    const radbias = (1 << radbiasshift);
-    const alpharadbshift = (alphabiasshift + radbiasshift);
-    const alpharadbias = (1 << alpharadbshift);
+    let radbiasshift = 8;
+    let radbias = (1 << radbiasshift);
+    let alpharadbshift = (alphabiasshift + radbiasshift);
+    let alpharadbias = (1 << alpharadbshift);
 
     /*
      * Types and Global Variables --------------------------
@@ -64,16 +67,16 @@ const NeuQuant = function () {
 
     // typedef int pixel[4]; /* BGRc */
     let network; /* the network itself - [netsize][4] */
-    const netindex = [];
+    let netindex = [];
 
     /* for network lookup - really 256 */
-    const bias = [];
+    let bias = [];
 
     /* bias and freq arrays for learning */
-    const freq = [];
-    const radpower = [];
+    let freq = [];
+    let radpower = [];
 
-    const NeuQuant = function NeuQuant(thepic, len, sample) {
+    let NeuQuant = exports.NeuQuant = function NeuQuant(thepic, len, sample) {
 
         let i;
         let p;
@@ -94,17 +97,17 @@ const NeuQuant = function () {
         }
     };
 
-    const colorMap = function colorMap() {
+    let colorMap = function colorMap() {
 
-        const map = [];
-        const index = new Array(netsize);
+        let map = [];
+        let index = new Array(netsize);
 
         for (let i = 0; i < netsize; i++)
             index[network[i][3]] = i;
 
         let k = 0;
         for (let l = 0; l < netsize; l++) {
-            const j = index[l];
+            let j = index[l];
             map[k++] = (network[j][0]);
             map[k++] = (network[j][1]);
             map[k++] = (network[j][2]);
@@ -119,7 +122,7 @@ const NeuQuant = function () {
      * -------------------------------------------------------------------------------
      */
 
-    const inxbuild = function inxbuild() {
+    let inxbuild = function inxbuild() {
 
         let i;
         let j;
@@ -150,7 +153,7 @@ const NeuQuant = function () {
             q = network[smallpos];
 
             /* swap p (i) and q (smallpos) entries */
-            if (i != smallpos) {
+            if (i !== smallpos) {
                 j = q[0];
                 q[0] = p[0];
                 p[0] = j;
@@ -167,7 +170,7 @@ const NeuQuant = function () {
 
             /* smallval entry is now in position i */
 
-            if (smallval != previouscol) {
+            if (smallval !== previouscol) {
 
                 netindex[previouscol] = (startpos + i) >> 1;
 
@@ -186,7 +189,7 @@ const NeuQuant = function () {
      * Main Learning Loop ------------------
      */
 
-    const learn = function learn() {
+    let learn = function learn() {
 
         let i;
         let j;
@@ -268,7 +271,7 @@ const NeuQuant = function () {
      * ----------------------------------------------------------------------------
      */
 
-    var map = function map(b, g, r) {
+    let map = exports.map = function map(b, g, r) {
 
         let i;
         let j;
@@ -343,7 +346,7 @@ const NeuQuant = function () {
         return (best);
     };
 
-    const process = function process() {
+    let process = exports.process = function process() {
         learn();
         unbiasnet();
         inxbuild();
@@ -356,7 +359,7 @@ const NeuQuant = function () {
      * -----------------------------------------------------------------------------------
      */
 
-    var unbiasnet = function unbiasnet() {
+    let unbiasnet = function unbiasnet() {
 
         let i;
         let j;
@@ -375,7 +378,7 @@ const NeuQuant = function () {
      * ---------------------------------------------------------------------------------
      */
 
-    var alterneigh = function alterneigh(rad, i, b, g, r) {
+    let alterneigh = function alterneigh(rad, i, b, g, r) {
 
         let j;
         let k;
@@ -427,10 +430,10 @@ const NeuQuant = function () {
      * ----------------------------------------------------
      */
 
-    var altersingle = function altersingle(alpha, i, b, g, r) {
+    let altersingle = function altersingle(alpha, i, b, g, r) {
 
         /* alter hit neuron */
-        const n = network[i];
+        let n = network[i];
         n[0] -= (alpha * (n[0] - b)) / initalpha;
         n[1] -= (alpha * (n[1] - g)) / initalpha;
         n[2] -= (alpha * (n[2] - r)) / initalpha;
@@ -440,7 +443,7 @@ const NeuQuant = function () {
      * Search for biased BGR values ----------------------------
      */
 
-    var contest = function contest(b, g, r) {
+    let contest = function contest(b, g, r) {
 
         /* finds closest neuron (min dist) and updates freq */
         /* finds best neuron (min dist-bias) and returns position */
@@ -497,6 +500,5 @@ const NeuQuant = function () {
     };
 
     NeuQuant.apply(this, arguments);
+    return exports;
 };
-
-export default new NeuQuant();
