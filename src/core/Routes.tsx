@@ -9,7 +9,8 @@ const Routes = () => {
         <Router>
             <Switch>
                 <Route path={ROUTES.MAIN} component={ImageDrawContainer} exact/>
-                <Route path={ROUTES.GIF_EDITOR} component={GifEditorContainer} exact />
+                <Route path={ROUTES.GIF_EDITOR} component={GifEditorContainer} exact/>
+                <Redirect to={ROUTES.MAIN} from="8"/>
             </Switch>
         </Router>
     );

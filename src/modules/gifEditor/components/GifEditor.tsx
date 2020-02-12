@@ -1,7 +1,7 @@
 import React from 'react';
 import {IGifSetting} from '../interface/IGifSetting';
 import GifEditorButtonGroup from './GifEditorButtonGroup';
-import StyledGifEditorContainer from '../styled/StyledGifEditorContainer';
+import StyledGifEditorWrapper from '../styled/StyledGifEditorWrapper';
 import StyledGif from '../styled/StyledGif';
 
 interface Props {
@@ -11,10 +11,10 @@ interface Props {
 
 const GifEditor: React.FC<Props> = ({gif, setGifSetting}) => {
     return (
-        <StyledGifEditorContainer>
+        <StyledGifEditorWrapper>
             <StyledGif src={gif}/>
             <GifEditorButtonGroup setGifSetting={setGifSetting}/>
-        </StyledGifEditorContainer>
+        </StyledGifEditorWrapper>
     );
 };
 

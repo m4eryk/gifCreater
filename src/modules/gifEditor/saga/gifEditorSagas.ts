@@ -1,6 +1,6 @@
-import {takeLatest, put, call} from 'redux-saga/effects';
-import {push, replace} from 'react-router-redux';
-import {createGifUrl, setGifUrl} from '../action/gifEditorAction';
+import {takeLatest, put,} from 'redux-saga/effects';
+import {push} from 'react-router-redux';
+import {setGifUrl} from '../action/gifEditorAction';
 import {CREATE_GIF} from '../constants/gifEditorActionType';
 import {ROUTES} from '../../../core/constants/routeConstants';
 

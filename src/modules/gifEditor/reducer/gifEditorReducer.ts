@@ -6,9 +6,9 @@ import {IImage} from '../../imageDraw/interface/IImage';
 
 const defaultState: IGifEditorState = {
     gifSetting: {
-        delay: 1000,
+        delay: 500,
         quality: 10,
-        repeat: true
+        repeat: false
     },
     gifUrl: '',
     gifData: ''
@@ -19,7 +19,7 @@ export const gifEditorReducer = (state: IGifEditorState = defaultState, action: 
         case CREATE_GIF:
             return {
                 ...state,
-                gifData: createGif(action.payload as IImage[])
+                gifData: createGif(action.payload as IImage[], state.gifSetting)
             };
         case SET_GIF_URL: {
             return {

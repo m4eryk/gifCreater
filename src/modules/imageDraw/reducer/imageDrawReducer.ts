@@ -4,7 +4,7 @@ import {DELETE_IMAGE, SET_IMAGE, SET_IMAGE_DRAW_SETTINGS} from '../constants/Ima
 
 const defaultState: IImageDrawState = {
     drawSettings: {
-        backgroundColor: '',
+        backgroundColor: 'white',
         brushColor: 'black',
         brushRadius: 10,
         imgSrc: ''

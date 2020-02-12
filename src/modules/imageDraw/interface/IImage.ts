@@ -1,4 +1,4 @@
 export interface IImage {
-    data: ImageData;
+    imageData: ImageData;
     imageURL: string;
 }

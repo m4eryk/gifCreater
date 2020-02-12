@@ -24,15 +24,24 @@ const ImageDraw: React.FC<Props> = ({imageDrawSettings, setImageDrawSettings, se
         setImageDrawSettings({[name]: value});
     }, [setImageDrawSettings]);
 
+    const setBackground = useCallback((color: string) => {
+        console.log(color);
+        if (ctx && canvasRef.current) {
+            ctx.fillStyle = color;
+            ctx.fillRect(0,0,400,400);
+        }
+    }, [ctx]);
+
     useEffect(() => {
         if (canvasRef.current) {
             setCtx(canvasRef.current.getContext('2d'));
 
             if (ctx) {
                 ctx.strokeStyle = imageDrawSettings.brushColor ? imageDrawSettings.brushColor : 'black';
+                setBackground(imageDrawSettings.backgroundColor ? imageDrawSettings.backgroundColor : 'white');
             }
         }
-    }, [setCtx, ctx, imageDrawSettings]);
+    }, [setCtx, ctx, imageDrawSettings, setBackground]);
 
     const handelDraw = useCallback((event: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
         if (canvasRef.current && ctx) {
@@ -49,12 +58,16 @@ const ImageDraw: React.FC<Props> = ({imageDrawSettings, setImageDrawSettings, se
     const clear = useMemo(() => () => {
         if (ctx) {
             ctx.clearRect(0, 0, 400, 400);
+            setBackground('white');
         }
-    }, [ctx]);
+    }, [ctx, setBackground]);
 
     const takeImage = () => {
         if (canvasRef.current && ctx) {
-            setImage({data: ctx.getImageData(0, 0, 400, 400), imageURL: canvasRef.current.toDataURL()});
+            setImage({
+                imageData: ctx.getImageData(0, 0, 400, 400),
+                imageURL: canvasRef.current.toDataURL()
+            });
         }
     };
 
