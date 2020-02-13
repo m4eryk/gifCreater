@@ -1,3 +1,4 @@
+import React from 'react';
 import {IDrawSettings} from '../interface/IDrawSettings';
 
 export interface ICoordinates {
@@ -10,12 +11,8 @@ export const draw = (
     { x, y }: ICoordinates,
     drawSettings?: IDrawSettings
 ): void => {
-    const canvasSettings = Object.assing({}, ctx);
-
-    canvasSettings.strokeStyle = drawSettings?.brushColor || 'black';
-    canvasSettings.lineWidth = drawSettings?.brushRadius || 2;
-    canvasSettings.lineTo(x, y);
-    canvasSettings.stroke();
+    ctx.lineTo(x, y);
+    ctx.stroke();
 };
 
 export const getCoordinates = (event: React.MouseEvent<HTMLCanvasElement, MouseEvent>, rect: DOMRect): ICoordinates => {
@@ -24,4 +21,3 @@ export const getCoordinates = (event: React.MouseEvent<HTMLCanvasElement, MouseE
 
     return { x, y };
 };
-

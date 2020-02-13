@@ -25,7 +25,6 @@ const ImageDraw: React.FC<Props> = ({imageDrawSettings, setImageDrawSettings, se
     }, [setImageDrawSettings]);
 
     const setBackground = useCallback((color: string) => {
-        console.log(color);
         if (ctx && canvasRef.current) {
             ctx.fillStyle = color;
             ctx.fillRect(0,0,400,400);
