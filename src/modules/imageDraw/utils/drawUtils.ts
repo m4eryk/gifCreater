@@ -7,27 +7,21 @@ export interface ICoordinates {
 
 export const draw = (
     ctx: CanvasRenderingContext2D,
-    coordinates: ICoordinates,
+    { x, y }: ICoordinates,
     drawSettings?: IDrawSettings
 ): void => {
-    let radius = 2;
-    let color = 'black';
+    const canvasSettings = Object.assing({}, ctx);
 
-    if (drawSettings) {
-        radius = drawSettings.brushRadius ? drawSettings.brushRadius : 2;
-        color = drawSettings.brushColor ? drawSettings.brushColor : 'black';
-    }
-
-    ctx.strokeStyle = color;
-    ctx.lineWidth = radius;
-    ctx.lineTo(coordinates.x, coordinates.y,);
-    ctx.stroke();
+    canvasSettings.strokeStyle = drawSettings?.brushColor || 'black';
+    canvasSettings.lineWidth = drawSettings?.brushRadius || 2;
+    canvasSettings.lineTo(x, y);
+    canvasSettings.stroke();
 };
 
 export const getCoordinates = (event: React.MouseEvent<HTMLCanvasElement, MouseEvent>, rect: DOMRect): ICoordinates => {
     const x: number = event.clientX - rect.left;
     const y: number = event.clientY - rect.top;
 
-    return {x, y};
+    return { x, y };
 };
 
