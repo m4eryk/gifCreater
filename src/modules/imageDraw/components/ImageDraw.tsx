@@ -25,25 +25,21 @@ const ImageDraw: React.FC<Props> = ({imageDrawSettings, setImageDrawSettings, se
     }, [setImageDrawSettings]);
 
     const setBackground = useCallback((color: string) => {
-        if (ctx && canvasRef.current) {
+        if (ctx && canvasRef?.current) {
             ctx.fillStyle = color;
             ctx.fillRect(0,0,400,400);
         }
     }, [ctx]);
 
     useEffect(() => {
-        if (canvasRef.current) {
-            setCtx(canvasRef.current.getContext('2d'));
-
-            if (ctx) {
-                ctx.strokeStyle = imageDrawSettings.brushColor ? imageDrawSettings.brushColor : 'black';
-                setBackground(imageDrawSettings.backgroundColor ? imageDrawSettings.backgroundColor : 'white');
-            }
+        if (canvasRef?.current) {
+            setCtx({ ...canvasRef.current.getContext('2d'), strokeStyle: imageDrawSettings?.brush
+            setBackground(imageDrawSettings?.backgroundColor || 'white');
         }
-    }, [setCtx, ctx, imageDrawSettings, setBackground]);
+    }, [setCtx, imageDrawSettings, setBackground]);
 
     const handelDraw = useCallback((event: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
-        if (canvasRef.current && ctx) {
+        if (canvasRef?.current && ctx) {
             const coordinates: ICoordinates = getCoordinates(event, canvasRef.current.getBoundingClientRect());
 
             if (event.buttons === 1) {
@@ -54,21 +50,21 @@ const ImageDraw: React.FC<Props> = ({imageDrawSettings, setImageDrawSettings, se
         }
     }, [ctx, imageDrawSettings]);
 
-    const clear = useMemo(() => () => {
+    const clear = useCallback(() => {
         if (ctx) {
             ctx.clearRect(0, 0, 400, 400);
             setBackground('white');
         }
     }, [ctx, setBackground]);
 
-    const takeImage = () => {
+    const takeImage = useCallback(() => {
         if (canvasRef.current && ctx) {
             setImage({
                 imageData: ctx.getImageData(0, 0, 400, 400),
                 imageURL: canvasRef.current.toDataURL()
             });
         }
-    };
+    }, [canvasRef, ctx, setImage]);
 
     return (
         <StyledImageContainer>
