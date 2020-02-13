@@ -9,6 +9,7 @@ import StyledInput from '../../../core/styled/StyledInput';
 interface Props {
     gifSetting: IGifSetting;
     setGifSetting: (setting: IGifSetting) => void;
+    download: () => void;
 }
 
 const GifEditorButtonGroup: React.FC<Props> = ({setGifSetting, gifSetting}) => {

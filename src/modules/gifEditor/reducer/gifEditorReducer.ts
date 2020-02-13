@@ -8,7 +8,7 @@ const defaultState: IGifEditorState = {
     gifSetting: {
         delay: 500,
         quality: 10,
-        repeat: "on"
+        repeat: 'on'
     },
     gifUrl: ''
 };

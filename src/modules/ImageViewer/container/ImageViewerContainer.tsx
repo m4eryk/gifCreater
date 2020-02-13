@@ -1,24 +1,24 @@
+import React from 'react';
+import ImageViewer from '../components/ImageViewer';
 import {IStore} from '../../../core/interface/IStore';
 import {getImageArray} from '../../imageDraw/selectors/imageDrawSelectors';
-import ImageViewer from '../components/ImageViewer';
+import {deleteImage} from '../../imageDraw/action/imagerDrawAction';
+import {createGifUrl} from '../../gifEditor/action/gifEditorAction';
 import {connect} from 'react-redux';
 import {Dispatch} from 'redux';
-import {deleteImage} from '../../imageDraw/action/imagerDrawAction';
-import React from 'react';
-import StyledButton from '../../../core/styled/StyledButton';
-import StyledImageViewContainer from '../styled/StyledImageViewContainer';
-import {createGifUrl} from '../../gifEditor/action/gifEditorAction';
-import {Link} from 'react-router-dom';
-import {ROUTES} from '../../../core/constants/routeConstants';
 import {IImage} from '../../imageDraw/interface/IImage';
+import {IDeleteImage} from '../../imageDraw/interface/IImageDrawActionType';
+import {ICreateGif} from '../../gifEditor/interface/IGifEditorActionTypes';
+import StyledImageViewContainer from '../styled/StyledImageViewContainer';
+import StyledButton from '../../../core/styled/StyledButton';
 
 const mapStateToProps = (state: IStore) => ({
     imageArray: getImageArray(state)
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-    createGifUrl: (gifUrl: IImage[]) => dispatch(createGifUrl(gifUrl)),
-    deleteImage: () => dispatch(deleteImage())
+    createGifUrl: (gifUrl: IImage[]): ICreateGif => dispatch(createGifUrl(gifUrl)),
+    deleteImage: (): IDeleteImage => dispatch(deleteImage())
 });
 
 interface Props {
@@ -29,15 +29,13 @@ interface Props {
 
 const ImageViewContainer: React.FC<Props> = ({deleteImage, imageArray, createGifUrl}) => {
 
-    const handleButton = () => createGifUrl(imageArray);
+    const handleButton = (): void => createGifUrl(imageArray);
 
     return (
         <StyledImageViewContainer>
             <ImageViewer imageArray={imageArray}/>
             <StyledButton onClick={deleteImage}>Очистить</StyledButton>
-            <Link to={ROUTES.GIF_EDITOR}>
-                <StyledButton onClick={handleButton}>Create gif</StyledButton>
-            </Link>
+            <StyledButton onClick={handleButton}>Create gif</StyledButton>
         </StyledImageViewContainer>
     );
 };

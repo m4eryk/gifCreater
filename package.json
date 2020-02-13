@@ -12,6 +12,7 @@
     "@types/react-canvas-draw": "^1.1.0",
     "@types/react-dom": "^16.9.0",
     "@types/react-router-redux": "^5.0.18",
+    "connected-react-router": "^6.7.0",
     "gif.js": "^0.2.0",
     "gifencoder": "^2.0.1",
     "react": "^16.12.0",

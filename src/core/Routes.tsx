@@ -1,19 +1,24 @@
 import React from 'react';
-import {BrowserRouter as Router, Redirect, Route, Switch} from 'react-router-dom';
+import {Redirect, Route, Switch} from 'react-router-dom';
+import {history} from './utils/historyUtils';
+import {Location} from 'history';
 import {ROUTES} from './constants/routeConstants';
+import {ConnectedRouter} from 'connected-react-router';
 import ImageDrawContainer from '../modules/imageDraw/containers/ImageDrawContainer';
 import GifEditorContainer from '../modules/gifEditor/containers/GifEditorContainer';
 
-const Routes = () => {
-    return (
-        <Router>
-            <Switch>
-                <Route path={ROUTES.MAIN} component={ImageDrawContainer} exact/>
-                <Route path={ROUTES.GIF_EDITOR} component={GifEditorContainer} exact/>
-                <Redirect to={ROUTES.MAIN} from="8"/>
-            </Switch>
-        </Router>
-    );
-};
+interface Props {
+    location: Location;
+}
+
+const Routes: React.FC<Props> = ({location}: Props) => (
+    <ConnectedRouter history={history}>
+        <Switch location={location}>
+            <Route path={ROUTES.MAIN} component={ImageDrawContainer} exact/>
+            <Route path={ROUTES.GIF_EDITOR} component={GifEditorContainer} exact/>
+            <Redirect to={ROUTES.MAIN} from="*"/>
+        </Switch>
+    </ConnectedRouter>
+);
 
 export default Routes;

@@ -1,13 +1,11 @@
 import React from 'react';
 import Store from './Store';
-import Routes from './Routes';
+import RoutesContainer from './containers/RoutesContainer';
 
-const App = () => {
-    return (
-        <Store>
-            <Routes/>
-        </Store>
-    );
-};
+const App: React.FC = () => (
+    <Store>
+        <RoutesContainer/>
+    </Store>
+);
 
 export default App;

@@ -8,13 +8,18 @@ interface Props {
     gif?: string;
     gifSetting: IGifSetting;
     setGifSetting: (setting: IGifSetting) => void;
+    download: () => void;
 }
 
-const GifEditor: React.FC<Props> = ({gif, setGifSetting, gifSetting}) => {
+const GifEditor: React.FC<Props> = ({gif, setGifSetting, gifSetting, download}) => {
     return (
         <StyledGifEditorWrapper>
             <StyledGif src={gif}/>
-            <GifEditorButtonGroup setGifSetting={setGifSetting} gifSetting={gifSetting}/>
+            <GifEditorButtonGroup
+                setGifSetting={setGifSetting}
+                gifSetting={gifSetting}
+                download={download}
+            />
         </StyledGifEditorWrapper>
     );
 };
