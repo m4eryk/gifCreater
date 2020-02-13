@@ -7,10 +7,11 @@ import StyledRange from '../../../core/styled/StyledRange';
 import StyledInput from '../../../core/styled/StyledInput';
 
 interface Props {
+    gifSetting: IGifSetting;
     setGifSetting: (setting: IGifSetting) => void;
 }
 
-const GifEditorButtonGroup: React.FC<Props> = ({setGifSetting}) => {
+const GifEditorButtonGroup: React.FC<Props> = ({setGifSetting, gifSetting}) => {
 
     const changeGifSetting = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
@@ -20,9 +21,26 @@ const GifEditorButtonGroup: React.FC<Props> = ({setGifSetting}) => {
 
     return (
         <StyledGifEditorButtonGroup>
-            <StyledRange onChange={changeGifSetting} placeholder="Frame delay" name='delay' max={1000}/>
-            <StyledInput onChange={changeGifSetting} placeholder="Quality" name='quality'/>
-            <CheckBox onChange={changeGifSetting} name="repeat">Repeat</CheckBox>
+            <StyledRange
+                onChange={changeGifSetting}
+                placeholder="Frame delay"
+                name='delay'
+                max={1000}
+                defaultValue={gifSetting.delay}
+            />
+            <StyledInput
+                onChange={changeGifSetting}
+                placeholder="Quality"
+                name='quality'
+                defaultValue={gifSetting.quality}
+            />
+            <CheckBox
+                onChange={changeGifSetting}
+                name="repeat"
+                defaultValue={gifSetting.repeat}
+            >
+                Repeat
+            </CheckBox>
             <StyledButton>Download</StyledButton>
         </StyledGifEditorButtonGroup>
     );

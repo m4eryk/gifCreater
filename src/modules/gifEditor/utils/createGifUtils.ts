@@ -5,9 +5,9 @@ import GIFEncoder from 'gifencoder';
 
 
 const setSetting = (encoder: GIFEncoder, setting: IGifSetting) => {
-    encoder.setRepeat(setting.repeat ? 0 : 1);
-    encoder.setDelay(500);
-    encoder.setQuality(10);
+    encoder.setRepeat(0);
+    encoder.setDelay(setting.delay);
+    encoder.setQuality(setting.quality);
 };
 
 export const createGif = (imageArray: IImage[], setting?: IGifSetting) => {
@@ -18,16 +18,13 @@ export const createGif = (imageArray: IImage[], setting?: IGifSetting) => {
     }
 
     encoder.start();
-
     imageArray.forEach(item => encoder.addFrame(item.imageData.data));
-
     encoder.finish();
 
     const blob = new Blob(
         [encoder.out.getData()],
         {type: 'image/gif'}
     );
-    encoder.setDispose(0);
 
     return URL.createObjectURL(blob);
 };

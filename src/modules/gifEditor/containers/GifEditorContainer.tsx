@@ -4,10 +4,11 @@ import {Dispatch} from 'redux';
 import {connect} from 'react-redux';
 import {setGifSetting} from '../action/gifEditorAction';
 import {IGifSetting} from '../interface/IGifSetting';
-import {getGifUrl} from '../selectors/gifEditorSelectors';
+import {getGifSetting, getGifUrl} from '../selectors/gifEditorSelectors';
 
 const mapStateToProps = (state: IStore) => ({
     gif: getGifUrl(state),
+    gifSetting: getGifSetting(state)
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

@@ -5,15 +5,16 @@ import StyledGifEditorWrapper from '../styled/StyledGifEditorWrapper';
 import StyledGif from '../styled/StyledGif';
 
 interface Props {
-    gif?: string,
+    gif?: string;
+    gifSetting: IGifSetting;
     setGifSetting: (setting: IGifSetting) => void;
 }
 
-const GifEditor: React.FC<Props> = ({gif, setGifSetting}) => {
+const GifEditor: React.FC<Props> = ({gif, setGifSetting, gifSetting}) => {
     return (
         <StyledGifEditorWrapper>
             <StyledGif src={gif}/>
-            <GifEditorButtonGroup setGifSetting={setGifSetting}/>
+            <GifEditorButtonGroup setGifSetting={setGifSetting} gifSetting={gifSetting}/>
         </StyledGifEditorWrapper>
     );
 };

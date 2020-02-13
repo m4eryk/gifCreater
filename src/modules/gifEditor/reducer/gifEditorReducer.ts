@@ -1,4 +1,4 @@
-import {CREATE_GIF, SET_GIF_SETTINGS, SET_GIF_URL} from '../constants/gifEditorActionType';
+import {CREATE_GIF, SET_GIF_SETTINGS} from '../constants/gifEditorActionType';
 import {IGifEditorActionType} from '../interface/IGifEditorActionTypes';
 import {IGifEditorState} from '../interface/IGifEditorState';
 import {createGif} from '../utils/createGifUtils';
@@ -8,10 +8,9 @@ const defaultState: IGifEditorState = {
     gifSetting: {
         delay: 500,
         quality: 10,
-        repeat: false
+        repeat: "on"
     },
-    gifUrl: '',
-    gifData: ''
+    gifUrl: ''
 };
 
 export const gifEditorReducer = (state: IGifEditorState = defaultState, action: IGifEditorActionType) => {
@@ -19,14 +18,8 @@ export const gifEditorReducer = (state: IGifEditorState = defaultState, action: 
         case CREATE_GIF:
             return {
                 ...state,
-                gifData: createGif(action.payload as IImage[], state.gifSetting)
+                gifUrl: createGif(action.payload as IImage[], state.gifSetting)
             };
-        case SET_GIF_URL: {
-            return {
-                ...state,
-                gifUrl: ''
-            }
-        }
         case SET_GIF_SETTINGS:
             return {
                 ...state,
