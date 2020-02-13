@@ -5,11 +5,12 @@ import {ROUTES} from '../../../core/constants/routeConstants';
 import {createGif} from '../utils/createGifUtils';
 import {IGifEditorActionType} from '../interface/IGifEditorActionTypes';
 import {IImage} from '../../imageDraw/interface/IImage';
+import {setGifUrl} from '../action/gifEditorAction';
 
-function* callCreateGif({ payload }: IGifEditorActionType) {
+function* callCreateGif({payload}: IGifEditorActionType) {
     const gifUrl = createGif(payload as IImage[]);
 
-    console.log(gifUrl);
+    yield put(setGifUrl(gifUrl));
     yield put(push(ROUTES.GIF_EDITOR));
 }
 
