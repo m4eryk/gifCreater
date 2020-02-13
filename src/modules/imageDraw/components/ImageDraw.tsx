@@ -1,17 +1,13 @@
-import React, {ChangeEvent, useCallback, useRef, useEffect, useState, useMemo} from 'react';
+import React, {ChangeEvent, useCallback, useRef, useEffect, useState} from 'react';
 import {draw, getCoordinates, ICoordinates} from '../utils/drawUtils';
-import {IDrawSettings} from '../interface/IDrawSettings';
-import {IImage} from '../interface/IImage';
 import StyledDrawSettingsTitle from '../styled/StyledDrawSettingsTitle';
 import StyledImageContainer from '../styled/StyledImageContainer';
 import StyledDrawSettings from '../styled/StyledDrawSettings';
 import StyledButton from '../../../core/styled/StyledButton';
 import StyledInput from '../../../core/styled/StyledInput';
+import {IImageDrawWrapper} from './ImageDrawWrapper';
 
-interface Props {
-    imageDrawSettings: IDrawSettings,
-    setImageDrawSettings: (setting: IDrawSettings) => void,
-    setImage: (image: IImage) => void;
+interface Props extends IImageDrawWrapper {
 }
 
 const ImageDraw: React.FC<Props> = ({imageDrawSettings, setImageDrawSettings, setImage}) => {
@@ -25,18 +21,21 @@ const ImageDraw: React.FC<Props> = ({imageDrawSettings, setImageDrawSettings, se
     }, [setImageDrawSettings]);
 
     const setBackground = useCallback((color: string) => {
-        if (ctx && canvasRef?.current) {
+        if (ctx) {
             ctx.fillStyle = color;
-            ctx.fillRect(0,0,400,400);
+            ctx.fillRect(0, 0, 400, 400);
         }
     }, [ctx]);
 
     useEffect(() => {
         if (canvasRef?.current) {
-            setCtx({ ...canvasRef.current.getContext('2d'), strokeStyle: imageDrawSettings?.brush
-            setBackground(imageDrawSettings?.backgroundColor || 'white');
+            setCtx(canvasRef.current.getContext('2d'));
+            if (ctx) {
+                ctx.strokeStyle = imageDrawSettings?.brushColor || 'black';
+                setBackground(imageDrawSettings?.backgroundColor || 'white');
+            }
         }
-    }, [setCtx, imageDrawSettings, setBackground]);
+    }, [ctx, setCtx, imageDrawSettings, setBackground]);
 
     const handelDraw = useCallback((event: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
         if (canvasRef?.current && ctx) {
