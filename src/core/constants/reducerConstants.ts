@@ -1,3 +1,3 @@
-export const IMAGE_DRAW_REDUCER = 'IMAGE_DRAW_REDUCER';
-export const GIF_EDITOR_REDUCER = 'GIF_EDITOR_REDUCER';
+export const IMAGE_DRAW_REDUCER = 'imageDrawReducer';
+export const GIF_EDITOR_REDUCER = 'gifEditorReducer';
 export const ROUTER = 'router';

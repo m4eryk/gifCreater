@@ -1,7 +1,9 @@
 import {IDrawSettings} from './IDrawSettings';
+import {IDrawItem} from './IDrawItem';
 import {IImage} from './IImage';
 
 export interface IImageDrawState {
     drawSettings: IDrawSettings;
-    image: IImage[];
+    drawItems: IDrawItem[];
+    imageArray: IImage[];
 }

@@ -21,7 +21,7 @@ export const createGif = (imageArray: IImage[], setting?: IGifSetting) => {
 
     const blob = new Blob(
         [encoder.out.getData()],
-        {type: 'image/gif'}
+        {type: 'imageArray/gif'}
     );
 
     return URL.createObjectURL(blob);

@@ -1,19 +1,23 @@
-import {setImage, setImageDrawSettings} from '../action/imagerDrawAction';
-import {getImageDrawSettings} from '../selectors/imageDrawSelectors';
-import {Dispatch} from 'redux';
-import {IStore} from '../../../core/interface/IStore';
-import {IDrawSettings} from '../interface/IDrawSettings';
-import {connect} from 'react-redux';
-import {IImage} from '../interface/IImage';
+import {setImage, setImageDrawSettings, setDrawItems, deleteDrawItems} from '../action/imagerDrawAction';
+import {getDrawItems, getImageDrawSettings} from '../selectors/imageDrawSelectors';
 import ImageDrawWrapper from '../components/ImageDrawWrapper';
+import {IDrawSettings} from '../interface/IDrawSettings';
+import {IStore} from '../../../core/interface/IStore';
+import {IImage} from '../interface/IImage';
+import {connect} from 'react-redux';
+import {Dispatch} from 'redux';
+import {IDrawItem} from '../interface/IDrawItem';
 
 const mapStateToProps = (state: IStore) => ({
-    imageDrawSettings: getImageDrawSettings(state)
+    imageDrawSettings: getImageDrawSettings(state),
+    drawItems: getDrawItems(state)
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
     setImageDrawSettings: (setting: IDrawSettings) => dispatch(setImageDrawSettings(setting)),
-    setImage: (image: IImage) => dispatch(setImage(image))
+    setImage: (image: IImage) => dispatch(setImage(image)),
+    setDrawItems: (drawItem: IDrawItem) => dispatch(setDrawItems(drawItem)),
+    deleteDrawItems: () => dispatch(deleteDrawItems())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ImageDrawWrapper);

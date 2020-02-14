@@ -1,6 +1,12 @@
 import {IImageDrawState} from '../interface/IImageDrawState';
 import {IImageDrawActionType} from '../interface/IImageDrawActionType';
-import {DELETE_IMAGE, SET_IMAGE, SET_IMAGE_DRAW_SETTINGS} from '../constants/ImageDrawActionType';
+import {
+    DELETE_DRAW_ITEMS,
+    DELETE_IMAGE,
+    SET_DRAW_ITEM,
+    SET_IMAGE,
+    SET_IMAGE_DRAW_SETTINGS
+} from '../constants/ImageDrawActionType';
 
 const defaultState: IImageDrawState = {
     drawSettings: {
@@ -9,7 +15,8 @@ const defaultState: IImageDrawState = {
         brushRadius: 10,
         imgSrc: ''
     },
-    image: []
+    drawItems: [],
+    imageArray: []
 };
 
 export const imageDrawReducer = (state: IImageDrawState = defaultState, action: IImageDrawActionType) => {
@@ -22,12 +29,22 @@ export const imageDrawReducer = (state: IImageDrawState = defaultState, action: 
         case SET_IMAGE:
             return {
                 ...state,
-                image: [...state.image, action.payload]
+                imageArray: [...state.imageArray, action.payload]
+            };
+        case SET_DRAW_ITEM:
+            return {
+                ...state,
+                drawItems: [...state.drawItems, action.payload]
             };
         case DELETE_IMAGE:
             return {
                 ...state,
-                image: []
+                imageArray: []
+            };
+        case DELETE_DRAW_ITEMS:
+            return {
+                ...state,
+                drawItems: []
             };
         default:
             return state;

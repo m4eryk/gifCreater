@@ -1,16 +1,24 @@
 import React, {ChangeEvent, useCallback, useRef, useEffect, useState} from 'react';
 import {draw, getCoordinates, ICoordinates} from '../utils/drawUtils';
+import {IImageDrawWrapper} from './ImageDrawWrapper';
+import {CANVAS_HEIGHT, CANVAS_WIDTH} from '../constants/drawConstant';
 import StyledDrawSettingsTitle from '../styled/StyledDrawSettingsTitle';
 import StyledImageContainer from '../styled/StyledImageContainer';
 import StyledDrawSettings from '../styled/StyledDrawSettings';
 import StyledButton from '../../../core/styled/StyledButton';
 import StyledInput from '../../../core/styled/StyledInput';
-import {IImageDrawWrapper} from './ImageDrawWrapper';
 
 interface Props extends IImageDrawWrapper {
 }
 
-const ImageDraw: React.FC<Props> = ({imageDrawSettings, setImageDrawSettings, setImage}) => {
+const ImageDraw: React.FC<Props> = ({
+    imageDrawSettings,
+    setImageDrawSettings,
+    setImage,
+    setDrawItems,
+    drawItems,
+    deleteDrawItems
+}) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>();
 
@@ -23,43 +31,46 @@ const ImageDraw: React.FC<Props> = ({imageDrawSettings, setImageDrawSettings, se
     const setBackground = useCallback((color: string) => {
         if (ctx) {
             ctx.fillStyle = color;
-            ctx.fillRect(0, 0, 400, 400);
+            ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         }
     }, [ctx]);
 
     useEffect(() => {
-        if (canvasRef?.current) {
+        if (canvasRef.current) {
             setCtx(canvasRef.current.getContext('2d'));
+
             if (ctx) {
-                ctx.strokeStyle = imageDrawSettings?.brushColor || 'black';
                 setBackground(imageDrawSettings?.backgroundColor || 'white');
+                drawItems.forEach(item => draw(ctx, item.location, item.drawSettings));
             }
         }
-    }, [ctx, setCtx, imageDrawSettings, setBackground]);
+    }, [ctx, drawItems, setCtx, imageDrawSettings, setBackground]);
 
     const handelDraw = useCallback((event: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
-        if (canvasRef?.current && ctx) {
+        if (canvasRef.current && ctx) {
             const coordinates: ICoordinates = getCoordinates(event, canvasRef.current.getBoundingClientRect());
 
             if (event.buttons === 1) {
-                draw(ctx, coordinates, imageDrawSettings);
-            } else {
-                ctx.moveTo(coordinates.x, coordinates.y);
+                setDrawItems(
+                    {
+                        location: {...coordinates},
+                        drawSettings: {...imageDrawSettings}
+                    }
+                );
             }
         }
-    }, [ctx, imageDrawSettings]);
+    }, [ctx, imageDrawSettings, setDrawItems]);
 
     const clear = useCallback(() => {
-        if (ctx) {
-            ctx.clearRect(0, 0, 400, 400);
+            deleteDrawItems();
             setBackground('white');
-        }
-    }, [ctx, setBackground]);
+        },
+        [deleteDrawItems, setBackground]);
 
     const takeImage = useCallback(() => {
         if (canvasRef.current && ctx) {
             setImage({
-                imageData: ctx.getImageData(0, 0, 400, 400),
+                imageData: ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT),
                 imageURL: canvasRef.current.toDataURL()
             });
         }
@@ -70,8 +81,8 @@ const ImageDraw: React.FC<Props> = ({imageDrawSettings, setImageDrawSettings, se
             <canvas
                 ref={canvasRef}
                 onMouseMove={handelDraw}
-                width={400}
-                height={400}
+                width={CANVAS_WIDTH}
+                height={CANVAS_HEIGHT}
             />
             <StyledDrawSettings>
                 <StyledDrawSettingsTitle>Settings</StyledDrawSettingsTitle>
@@ -104,14 +115,6 @@ const ImageDraw: React.FC<Props> = ({imageDrawSettings, setImageDrawSettings, se
             </StyledDrawSettings>
         </StyledImageContainer>
     );
-};
-
-ImageDraw.defaultProps = {
-    imageDrawSettings: {
-        brushColor: 'black',
-        brushRadius: 10,
-        backgroundColor: 'white'
-    }
 };
 
 export default ImageDraw;

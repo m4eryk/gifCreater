@@ -3,12 +3,12 @@ import {push} from 'react-router-redux';
 import {CREATE_GIF, SET_GIF_SETTINGS} from '../constants/gifEditorActionType';
 import {ROUTES} from '../../../core/constants/routeConstants';
 import {createGif} from '../utils/createGifUtils';
-import {IGifEditorActionType, ISetGifSetting} from '../interface/IGifEditorActionTypes';
+import {ISetGifSetting} from '../interface/IGifEditorActionTypes';
 import {IImage} from '../../imageDraw/interface/IImage';
 import {setGifUrl} from '../action/gifEditorAction';
 import {getImageArray} from '../../imageDraw/selectors/imageDrawSelectors';
 
-function* callCreateGif({payload}: IGifEditorActionType) {
+function* callCreateGif() {
     const imageArray: IImage[] = yield select(getImageArray);
     const gifUrl = createGif(imageArray);
 

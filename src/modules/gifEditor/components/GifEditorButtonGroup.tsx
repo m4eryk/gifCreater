@@ -12,7 +12,7 @@ interface Props {
     download: () => void;
 }
 
-const GifEditorButtonGroup: React.FC<Props> = ({setGifSetting, gifSetting}) => {
+const GifEditorButtonGroup: React.FC<Props> = ({setGifSetting, gifSetting, download}) => {
 
     const changeInputGifSetting = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const {name, value,} = e.target;
@@ -31,13 +31,14 @@ const GifEditorButtonGroup: React.FC<Props> = ({setGifSetting, gifSetting}) => {
                 placeholder="Frame delay"
                 name='delay'
                 max={1000}
-                defaultValue={gifSetting.delay}
+                value={gifSetting.delay}
             />
             <StyledInput
                 onChange={changeInputGifSetting}
+                type="number"
                 placeholder="Quality"
                 name='quality'
-                defaultValue={gifSetting.quality}
+                value={gifSetting.quality}
             />
             <CheckBox
                 onChange={changeCheckBoxGifSetting}
@@ -46,7 +47,7 @@ const GifEditorButtonGroup: React.FC<Props> = ({setGifSetting, gifSetting}) => {
             >
                 Repeat
             </CheckBox>
-            <StyledButton>Download</StyledButton>
+            <StyledButton onClick={download}>Download</StyledButton>
         </StyledGifEditorButtonGroup>
     );
 };

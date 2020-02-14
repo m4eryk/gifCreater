@@ -8,13 +8,13 @@ import StyledImage from '../styled/StyledImage';
 
 interface Props {
     imageArray: IImage[],
-    deleteImage: () => void,
+    deleteImageArray: () => void,
     createGifUrl: () => void
 }
 
 const idGenerator = createIdGenerator();
 
-const ImageViewer: React.FC<Props> = ({deleteImage, imageArray, createGifUrl}) => {
+const ImageViewer: React.FC<Props> = ({deleteImageArray, imageArray, createGifUrl}) => {
     const mapImage = useCallback((image: IImage) => (
         <StyledImage key={idGenerator.next().value} src={image.imageURL} alt="..."/>
     ), []);
@@ -26,7 +26,7 @@ const ImageViewer: React.FC<Props> = ({deleteImage, imageArray, createGifUrl}) =
             <StyledImageView>
                 {imageArray.map(mapImage)}
             </StyledImageView>
-            <StyledButton onClick={deleteImage}>Очистить</StyledButton>
+            <StyledButton onClick={deleteImageArray}>Clear</StyledButton>
             <StyledButton onClick={handleButton}>Create gif</StyledButton>
         </StyledImageViewContainer>
     );
