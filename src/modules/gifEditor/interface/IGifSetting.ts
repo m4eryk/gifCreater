@@ -1,5 +1,5 @@
 export interface IGifSetting {
     delay?: number,
-    repeat?: string,
+    repeat?: boolean,
     quality?: number
 }

@@ -14,31 +14,35 @@ interface Props {
 
 const GifEditorButtonGroup: React.FC<Props> = ({setGifSetting, gifSetting}) => {
 
-    const changeGifSetting = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = e.target;
-
+    const changeInputGifSetting = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        const {name, value,} = e.target;
         setGifSetting({[name]: value});
+    }, [setGifSetting]);
+
+    const changeCheckBoxGifSetting = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        const {name, checked} = e.target;
+        setGifSetting({[name]: checked});
     }, [setGifSetting]);
 
     return (
         <StyledGifEditorButtonGroup>
             <StyledRange
-                onChange={changeGifSetting}
+                onChange={changeInputGifSetting}
                 placeholder="Frame delay"
                 name='delay'
                 max={1000}
                 defaultValue={gifSetting.delay}
             />
             <StyledInput
-                onChange={changeGifSetting}
+                onChange={changeInputGifSetting}
                 placeholder="Quality"
                 name='quality'
                 defaultValue={gifSetting.quality}
             />
             <CheckBox
-                onChange={changeGifSetting}
+                onChange={changeCheckBoxGifSetting}
                 name="repeat"
-                defaultValue={gifSetting.repeat}
+                checked={gifSetting.repeat || false}
             >
                 Repeat
             </CheckBox>

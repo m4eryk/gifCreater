@@ -3,7 +3,6 @@ import {getImageArray} from '../../imageDraw/selectors/imageDrawSelectors';
 import {deleteImage} from '../../imageDraw/action/imagerDrawAction';
 import {createGif} from '../../gifEditor/action/gifEditorAction';
 import {Dispatch} from 'redux';
-import {IImage} from '../../imageDraw/interface/IImage';
 import {IDeleteImage} from '../../imageDraw/interface/IImageDrawActionType';
 import {ICreateGif} from '../../gifEditor/interface/IGifEditorActionTypes';
 import ImageViewer from '../components/ImageViewer';
@@ -14,7 +13,7 @@ const mapStateToProps = (state: IStore) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-    createGifUrl: (gifUrl: IImage[]): ICreateGif => dispatch(createGif(gifUrl)),
+    createGifUrl: (): ICreateGif => dispatch(createGif()),
     deleteImage: (): IDeleteImage => dispatch(deleteImage())
 });
 

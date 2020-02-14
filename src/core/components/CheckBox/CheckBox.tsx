@@ -4,7 +4,7 @@ import StyledCheckBox from '../../styled/StyledCheckBox';
 interface Props {
     onChange?: (e: ChangeEvent<HTMLInputElement>) => void,
     name?: string,
-    defaultValue?: string
+    checked?: boolean
 }
 
 const CheckBox: React.FC<Props> = ({children, ...rest}) => {
@@ -14,6 +14,11 @@ const CheckBox: React.FC<Props> = ({children, ...rest}) => {
             {children}
         </div>
     );
+};
+
+CheckBox.defaultProps = {
+    checked: true,
+    name: 'checkBox'
 };
 
 export default CheckBox;

@@ -1,15 +1,15 @@
 import React, {useCallback} from 'react';
-import StyledImage from '../styled/StyledImage';
-import StyledImageView from '../styled/StyledImageView';
 import {createIdGenerator} from '../../../core/utils/idGenerator';
 import {IImage} from '../../imageDraw/interface/IImage';
 import StyledImageViewContainer from '../styled/StyledImageViewContainer';
 import StyledButton from '../../../core/styled/StyledButton';
+import StyledImageView from '../styled/StyledImageView';
+import StyledImage from '../styled/StyledImage';
 
 interface Props {
     imageArray: IImage[],
     deleteImage: () => void,
-    createGifUrl: (gifUrl: IImage[]) => void
+    createGifUrl: () => void
 }
 
 const idGenerator = createIdGenerator();
@@ -19,7 +19,7 @@ const ImageViewer: React.FC<Props> = ({deleteImage, imageArray, createGifUrl}) =
         <StyledImage key={idGenerator.next().value} src={image.imageURL} alt="..."/>
     ), []);
 
-    const handleButton = useCallback((): void => createGifUrl(imageArray), [createGifUrl, imageArray]);
+    const handleButton = useCallback((): void => createGifUrl(), [createGifUrl]);
 
     return (
         <StyledImageViewContainer>
