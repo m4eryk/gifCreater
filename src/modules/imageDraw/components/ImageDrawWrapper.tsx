@@ -13,6 +13,7 @@ export interface IImageDrawWrapper {
     setImage: (image: IImage) => void;
     setDrawItems: (drawItem: IDrawItem) => void;
     deleteDrawItems: () => void;
+    undoDrawItems: () => void;
 }
 
 const ImageDrawWrapper: React.FC<IImageDrawWrapper> = ({
@@ -21,7 +22,8 @@ const ImageDrawWrapper: React.FC<IImageDrawWrapper> = ({
     imageDrawSettings,
     setDrawItems,
     drawItems,
-    deleteDrawItems
+    deleteDrawItems,
+    undoDrawItems
 }) => {
     return (
         <StyledImageWrapper>
@@ -32,6 +34,7 @@ const ImageDrawWrapper: React.FC<IImageDrawWrapper> = ({
                 imageDrawSettings={imageDrawSettings}
                 drawItems={drawItems}
                 deleteDrawItems={deleteDrawItems}
+                undoDrawItems={undoDrawItems}
             />
             <ImageViewerContainer/>
         </StyledImageWrapper>

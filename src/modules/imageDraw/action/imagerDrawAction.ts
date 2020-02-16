@@ -4,14 +4,16 @@ import {
     DELETE_IMAGE,
     SET_DRAW_ITEM,
     SET_IMAGE,
-    SET_IMAGE_DRAW_SETTINGS
+    SET_IMAGE_DRAW_SETTINGS,
+    UNDO_DRAW_ITEM
 } from '../constants/ImageDrawActionType';
 import {
     IDeleteDrawItems,
     IDeleteImageArray,
     ISetDrawItem,
     ISetImage,
-    ISetImageDrawSettings
+    ISetImageDrawSettings,
+    IUndoDrawItem
 } from '../interface/IImageDrawActionType';
 import {IImage} from '../interface/IImage';
 import {IDrawItem} from '../interface/IDrawItem';
@@ -29,6 +31,10 @@ export const setImage = (image: IImage): ISetImage => ({
 export const setDrawItems = (drawItem: IDrawItem): ISetDrawItem => ({
     type: SET_DRAW_ITEM,
     payload: drawItem
+});
+
+export const undoDrawItems = (): IUndoDrawItem => ({
+    type: UNDO_DRAW_ITEM,
 });
 
 export const deleteDrawItems = (): IDeleteDrawItems => ({

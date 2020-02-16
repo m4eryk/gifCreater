@@ -5,7 +5,7 @@ import {
     DELETE_IMAGE,
     SET_DRAW_ITEM,
     SET_IMAGE,
-    SET_IMAGE_DRAW_SETTINGS
+    SET_IMAGE_DRAW_SETTINGS, UNDO_DRAW_ITEM
 } from '../constants/ImageDrawActionType';
 
 const defaultState: IImageDrawState = {
@@ -13,7 +13,6 @@ const defaultState: IImageDrawState = {
         backgroundColor: 'white',
         brushColor: 'black',
         brushRadius: 10,
-        imgSrc: ''
     },
     drawItems: [],
     imageArray: []
@@ -35,6 +34,11 @@ export const imageDrawReducer = (state: IImageDrawState = defaultState, action: 
             return {
                 ...state,
                 drawItems: [...state.drawItems, action.payload]
+            };
+        case UNDO_DRAW_ITEM:
+            return {
+                ...state,
+                drawItems: [...state.drawItems.slice(0, -4) ]
             };
         case DELETE_IMAGE:
             return {

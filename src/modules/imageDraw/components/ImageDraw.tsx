@@ -13,6 +13,7 @@ interface Props extends IImageDrawWrapper {
 
 const ImageDraw: React.FC<Props> = ({
     imageDrawSettings,
+    undoDrawItems,
     setImageDrawSettings,
     setImage,
     setDrawItems,
@@ -67,6 +68,8 @@ const ImageDraw: React.FC<Props> = ({
         },
         [deleteDrawItems, setBackground]);
 
+    const undo = useCallback(() => undoDrawItems(),[undoDrawItems]);
+
     const takeImage = useCallback(() => {
         if (canvasRef.current && ctx) {
             setImage({
@@ -105,6 +108,7 @@ const ImageDraw: React.FC<Props> = ({
                     defaultValue={imageDrawSettings.backgroundColor}
                 />
                 <StyledButton onClick={clear}>Clear</StyledButton>
+                <StyledButton onClick={undo}>Undo</StyledButton>
                 <StyledButton onClick={takeImage}>Take Image</StyledButton>
             </StyledDrawSettings>
         </StyledImageContainer>
