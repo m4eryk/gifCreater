@@ -104,12 +104,6 @@ const ImageDraw: React.FC<Props> = ({
                     onChange={changeImageDrawSetting}
                     defaultValue={imageDrawSettings.backgroundColor}
                 />
-                <StyledInput
-                    placeholder="Image url"
-                    name="backgroundColor"
-                    onChange={changeImageDrawSetting}
-                    defaultValue={imageDrawSettings.imgSrc}
-                />
                 <StyledButton onClick={clear}>Clear</StyledButton>
                 <StyledButton onClick={takeImage}>Take Image</StyledButton>
             </StyledDrawSettings>
