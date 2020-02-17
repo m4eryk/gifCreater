@@ -14,9 +14,9 @@ export const getCoordinates = (event: React.MouseEvent<HTMLCanvasElement, MouseE
 };
 
 const configureRect = (drawSettings: IDrawSettings) => {
-    const r =  drawSettings.brushRadius ?  drawSettings.brushRadius * -1 : -10;
+    const r = drawSettings.brushRadius ? drawSettings.brushRadius * -1 : -10;
 
-    return {w: r, h: r}
+    return {w: r, h: r};
 };
 
 export const draw = (
@@ -25,7 +25,7 @@ export const draw = (
     drawSettings: IDrawSettings
 ): void => {
     ctx.fillStyle = drawSettings?.brushColor || 'black';
-    const {w, h } = configureRect(drawSettings);
+    const {w, h} = configureRect(drawSettings);
 
     ctx.fillRect(x, y, w, h);
 };
