@@ -5,6 +5,7 @@ import StyledGifEditorButtonGroup from '../../imageDraw/styled/StyledGifEditorBu
 import StyledButton from '../../../core/styled/StyledButton';
 import StyledRange from '../../../core/styled/StyledRange';
 import StyledInput from '../../../core/styled/StyledInput';
+import StyledGifEditorDelayLabel from '../styled/StyledGifEditorDelayLabel';
 
 interface Props {
     gifSetting: IGifSetting;
@@ -26,6 +27,7 @@ const GifEditorButtonGroup: React.FC<Props> = ({setGifSetting, gifSetting, downl
 
     return (
         <StyledGifEditorButtonGroup>
+            <StyledGifEditorDelayLabel>Delay: {gifSetting.delay}</StyledGifEditorDelayLabel>
             <StyledRange
                 onChange={changeInputGifSetting}
                 placeholder="Frame delay"

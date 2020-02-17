@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const StyledRange = styled.input`
   -webkit-appearance: none;
   appearance: none;
-  width: 100%; 
+  width: 100%;
   height: 5px;
   background: black;
   outline: none;  
