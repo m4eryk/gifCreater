@@ -6,7 +6,7 @@ import {createGif} from '../utils/createGifUtils';
 import {ISetGifSetting} from '../interface/IGifEditorActionTypes';
 import {IImage} from '../../imageDraw/interface/IImage';
 import {setGifUrl} from '../action/gifEditorAction';
-import {getImageArray} from '../../imageDraw/selectors/imageDrawSelectors';
+import {getImageArray} from '../../ImageViewer/selectors/imageViewerSelectors';
 
 function* callCreateGif() {
     const imageArray: IImage[] = yield select(getImageArray);

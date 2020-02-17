@@ -2,24 +2,28 @@ import React, {ChangeEvent, useCallback, useRef, useEffect, useState} from 'reac
 import {draw, getCoordinates, ICoordinates} from '../utils/drawUtils';
 import {IImageDrawWrapper} from './ImageDrawWrapper';
 import {CANVAS_HEIGHT, CANVAS_WIDTH} from '../constants/drawConstant';
+import CheckBox from '../../../core/components/CheckBox/CheckBox';
 import StyledDrawSettingsTitle from '../styled/StyledDrawSettingsTitle';
 import StyledImageContainer from '../styled/StyledImageContainer';
 import StyledDrawSettings from '../styled/StyledDrawSettings';
 import StyledButton from '../../../core/styled/StyledButton';
 import StyledInput from '../../../core/styled/StyledInput';
+import StyledDrawCanvas from '../styled/StyledDrawCanvas';
 
 interface Props extends IImageDrawWrapper {
 }
 
 const ImageDraw: React.FC<Props> = ({
-    imageDrawSettings,
-    undoDrawItems,
-    setImageDrawSettings,
-    setImage,
-    setDrawItems,
-    drawItems,
-    deleteDrawItems
-}) => {
+                                        imageDrawSettings,
+                                        undoDrawItems,
+                                        setImageDrawSettings,
+                                        setImage,
+                                        setDrawItems,
+                                        drawItems,
+                                        deleteDrawItems,
+                                        isErase,
+                                        eraseDrawItems
+                                    }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>();
 
@@ -62,26 +66,29 @@ const ImageDraw: React.FC<Props> = ({
         }
     }, [ctx, imageDrawSettings, setDrawItems]);
 
+    const erase = useCallback(() => eraseDrawItems(), [eraseDrawItems]);
+
     const clear = useCallback(() => {
             deleteDrawItems();
             setBackground('white');
         },
         [deleteDrawItems, setBackground]);
 
-    const undo = useCallback(() => undoDrawItems(),[undoDrawItems]);
+    const undo = useCallback(() => undoDrawItems(), [undoDrawItems]);
 
     const takeImage = useCallback(() => {
-        if (canvasRef.current && ctx) {
-            setImage({
-                imageData: ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT),
-                imageURL: canvasRef.current.toDataURL()
-            });
-        }
-    }, [canvasRef, ctx, setImage]);
+            if (canvasRef.current && ctx) {
+                setImage({
+                    imageData: ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT),
+                    imageURL: canvasRef.current.toDataURL()
+                });
+            }
+        },
+        [canvasRef, ctx, setImage]);
 
     return (
         <StyledImageContainer>
-            <canvas
+            <StyledDrawCanvas
                 ref={canvasRef}
                 onMouseMove={handelDraw}
                 width={CANVAS_WIDTH}
@@ -107,6 +114,7 @@ const ImageDraw: React.FC<Props> = ({
                     onChange={changeImageDrawSetting}
                     defaultValue={imageDrawSettings.backgroundColor}
                 />
+                <CheckBox onChange={erase} checked={isErase}>Erase</CheckBox>
                 <StyledButton onClick={clear}>Clear</StyledButton>
                 <StyledButton onClick={undo}>Undo</StyledButton>
                 <StyledButton onClick={takeImage}>Take Image</StyledButton>

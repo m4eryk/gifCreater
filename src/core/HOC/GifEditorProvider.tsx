@@ -1,6 +1,6 @@
 import React, {useMemo} from 'react';
+import {getImageArray} from '../../modules/ImageViewer/selectors/imageViewerSelectors';
 import {useSelector} from 'react-redux';
-import {getImageArray} from '../../modules/imageDraw/selectors/imageDrawSelectors';
 import {Redirect, Route, RouteProps} from 'react-router-dom';
 import {ROUTES} from '../constants/routeConstants';
 

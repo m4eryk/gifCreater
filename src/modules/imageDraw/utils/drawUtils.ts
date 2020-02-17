@@ -13,10 +13,11 @@ export const getCoordinates = (event: React.MouseEvent<HTMLCanvasElement, MouseE
     return {x, y};
 };
 
-const configureRect = (drawSettings: IDrawSettings) => {
-    const r = drawSettings.brushRadius ? drawSettings.brushRadius * -1 : -10;
+const configureRect = (x: number, y: number, r: number) => {
+    const xRect = x - (r / 2);
+    const yRect = y - (r * 2);
 
-    return {w: r, h: r};
+    return {xRect, yRect};
 };
 
 export const draw = (
@@ -24,8 +25,9 @@ export const draw = (
     {x, y}: ICoordinates,
     drawSettings: IDrawSettings
 ): void => {
-    ctx.fillStyle = drawSettings?.brushColor || 'black';
-    const {w, h} = configureRect(drawSettings);
+    const r = drawSettings?.brushRadius || 10;
+    const {xRect, yRect} = configureRect(x, y, r);
 
-    ctx.fillRect(x, y, w, h);
+    ctx.fillStyle = drawSettings?.brushColor || 'black';
+    ctx.fillRect(xRect, yRect, r, r);
 };

@@ -2,10 +2,11 @@ import {IImageDrawState} from '../interface/IImageDrawState';
 import {IImageDrawActionType} from '../interface/IImageDrawActionType';
 import {
     DELETE_DRAW_ITEMS,
-    DELETE_IMAGE,
+    ERASE_DRAW_ITEM,
     SET_DRAW_ITEM,
-    SET_IMAGE,
-    SET_IMAGE_DRAW_SETTINGS, UNDO_DRAW_ITEM
+    SET_IMAGE_DRAW_SETTINGS,
+    SET_PAST_BRUSH_COLOR,
+    UNDO_DRAW_ITEM
 } from '../constants/ImageDrawActionType';
 
 const defaultState: IImageDrawState = {
@@ -14,8 +15,9 @@ const defaultState: IImageDrawState = {
         brushColor: 'black',
         brushRadius: 10,
     },
+    pastBrushColor: '',
+    isErase: false,
     drawItems: [],
-    imageArray: []
 };
 
 export const imageDrawReducer = (state: IImageDrawState = defaultState, action: IImageDrawActionType) => {
@@ -25,11 +27,6 @@ export const imageDrawReducer = (state: IImageDrawState = defaultState, action: 
                 ...state,
                 drawSettings: {...state.drawSettings, ...action.payload}
             };
-        case SET_IMAGE:
-            return {
-                ...state,
-                imageArray: [...state.imageArray, action.payload]
-            };
         case SET_DRAW_ITEM:
             return {
                 ...state,
@@ -38,12 +35,17 @@ export const imageDrawReducer = (state: IImageDrawState = defaultState, action: 
         case UNDO_DRAW_ITEM:
             return {
                 ...state,
-                drawItems: [...state.drawItems.slice(0, -4) ]
+                drawItems: [...state.drawItems.slice(0, -4)]
             };
-        case DELETE_IMAGE:
+        case ERASE_DRAW_ITEM:
             return {
                 ...state,
-                imageArray: []
+                isErase: !state.isErase
+            };
+        case SET_PAST_BRUSH_COLOR:
+            return {
+                ...state,
+                pastBrushColor: action.payload
             };
         case DELETE_DRAW_ITEMS:
             return {

@@ -7,19 +7,22 @@ import StyledImageView from '../styled/StyledImageView';
 import StyledImage from '../styled/StyledImage';
 
 interface Props {
-    imageArray: IImage[],
-    deleteImageArray: () => void,
-    createGifUrl: () => void
+    imageArray: IImage[];
+    deleteImageArray: () => void;
+    createGifUrl: () => void;
+    undoImage: () => void;
 }
 
 const idGenerator = createIdGenerator();
 
-const ImageViewer: React.FC<Props> = ({deleteImageArray, imageArray, createGifUrl}) => {
+const ImageViewer: React.FC<Props> = ({deleteImageArray, imageArray, createGifUrl, undoImage}) => {
     const mapImage = useCallback((image: IImage) => (
         <StyledImage key={idGenerator.next().value} src={image.imageURL} alt="..."/>
     ), []);
 
-    const handleButton = useCallback((): void => createGifUrl(), [createGifUrl]);
+    const handleCreateGif = useCallback((): void => createGifUrl(), [createGifUrl]);
+
+    const handleUndoImage = useCallback((): void => undoImage(), [undoImage]);
 
     return (
         <StyledImageViewContainer>
@@ -27,7 +30,8 @@ const ImageViewer: React.FC<Props> = ({deleteImageArray, imageArray, createGifUr
                 {imageArray.map(mapImage)}
             </StyledImageView>
             <StyledButton onClick={deleteImageArray}>Clear</StyledButton>
-            <StyledButton onClick={handleButton}>Create gif</StyledButton>
+            <StyledButton onClick={handleUndoImage}>Undo</StyledButton>
+            <StyledButton onClick={handleCreateGif}>Create gif</StyledButton>
         </StyledImageViewContainer>
     );
 };

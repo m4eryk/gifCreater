@@ -8,10 +8,12 @@ import {IDrawItem} from '../interface/IDrawItem';
 
 export interface IImageDrawWrapper {
     drawItems: IDrawItem[];
+    isErase: boolean;
     imageDrawSettings: IDrawSettings;
     setImageDrawSettings: (setting: IDrawSettings) => void;
     setImage: (image: IImage) => void;
     setDrawItems: (drawItem: IDrawItem) => void;
+    eraseDrawItems: () => void;
     deleteDrawItems: () => void;
     undoDrawItems: () => void;
 }
@@ -22,7 +24,9 @@ const ImageDrawWrapper: React.FC<IImageDrawWrapper> = ({
     imageDrawSettings,
     setDrawItems,
     drawItems,
+    isErase,
     deleteDrawItems,
+    eraseDrawItems,
     undoDrawItems
 }) => {
     return (
@@ -35,6 +39,8 @@ const ImageDrawWrapper: React.FC<IImageDrawWrapper> = ({
                 drawItems={drawItems}
                 deleteDrawItems={deleteDrawItems}
                 undoDrawItems={undoDrawItems}
+                isErase={isErase}
+                eraseDrawItems={eraseDrawItems}
             />
             <ImageViewerContainer/>
         </StyledImageWrapper>

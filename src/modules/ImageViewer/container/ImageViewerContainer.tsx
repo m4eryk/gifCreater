@@ -1,9 +1,9 @@
 import {IStore} from '../../../core/interface/IStore';
-import {getImageArray} from '../../imageDraw/selectors/imageDrawSelectors';
-import {deleteImageArray} from '../../imageDraw/action/imagerDrawAction';
+import {deleteImageArray, undoImage} from '../action/imageViewrActions';
+import {getImageArray} from '../selectors/imageViewerSelectors';
 import {createGif} from '../../gifEditor/action/gifEditorAction';
 import {Dispatch} from 'redux';
-import {IDeleteImageArray} from '../../imageDraw/interface/IImageDrawActionType';
+import {IDeleteImageArray, IUndoImage} from '../interface/IImageViewerActionType';
 import {ICreateGif} from '../../gifEditor/interface/IGifEditorActionTypes';
 import ImageViewer from '../components/ImageViewer';
 import {connect} from 'react-redux';
@@ -14,6 +14,7 @@ const mapStateToProps = (state: IStore) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
     createGifUrl: (): ICreateGif => dispatch(createGif()),
+    undoImage: (): IUndoImage => dispatch(undoImage()),
     deleteImageArray: (): IDeleteImageArray => dispatch(deleteImageArray())
 });
 
