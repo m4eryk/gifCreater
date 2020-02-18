@@ -1,12 +1,9 @@
 import React, {useCallback} from 'react';
-import {createIdGenerator} from '../../../core/utils/idGenerator';
 import {IImage} from '../../imageDraw/interface/IImage';
-import {SortableContainer, SortableElement} from 'react-sortable-hoc';
+import arrayMove from 'array-move';
+import SortableList from '../../../core/components/SortableList/SortableList';
 import StyledImageViewContainer from '../styled/StyledImageViewContainer';
 import StyledButton from '../../../core/styled/StyledButton';
-import arrayMove from 'array-move';
-import StyledImageView from '../styled/StyledImageView';
-import StyledImage from '../styled/StyledImage';
 
 interface Props {
     imageArray: IImage[];
@@ -15,22 +12,6 @@ interface Props {
     undoImage: () => void;
     sortImageArray: (newImageArray: IImage[]) => void;
 }
-
-const idGenerator = createIdGenerator();
-
-const SortableItem = SortableElement(({item}: { item: IImage }) =>
-    <StyledImage src={item.imageURL}/>
-);
-
-const SortableList = SortableContainer(({items}: { items: IImage[] }) => {
-    return (
-        <StyledImageView>
-            {items.map((value, index) => (
-                <SortableItem key={idGenerator.next().value} index={index} item={value}/>
-            ))}
-        </StyledImageView>
-    );
-});
 
 const ImageViewer: React.FC<Props> = ({deleteImageArray, imageArray, createGifUrl, undoImage, sortImageArray}) => {
 
@@ -44,7 +25,7 @@ const ImageViewer: React.FC<Props> = ({deleteImageArray, imageArray, createGifUr
         <StyledImageViewContainer>
             <SortableList
                 axis="x"
-                lockAxis="x"
+                lockAxis='x'
                 items={imageArray}
                 onSortEnd={onSortEnd}
                 transitionDuration={500}
